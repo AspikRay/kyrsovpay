@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card p-4 shadow-lg" style="background:#20283a; color:#eaf1fb; border-radius:18px;">
+                <h2 class="mb-3" style="color:#6ec1ff;">{{ ad.title }}</h2>
+                <div class="mb-3">{{ ad.description }}</div>
+                <div class="mb-3 fs-5">Цена: <b>{{ ad.price }}</b> {% if ad.currency == 'USD' %}$ {% elif ad.currency == 'EUR' %}€ {% else %}₽{% endif %}</div>
+                <a href="/" class="btn btn-main mb-2">Назад</a>
+                <button class="btn btn-main w-100" data-bs-toggle="modal" data-bs-target="#payModal" data-ad-title="{{ ad.title }}" data-ad-price="{{ ad.price }}" data-ad-currency="{{ ad.currency }}" data-ad-id="{{ ad.id }}">Купить</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

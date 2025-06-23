@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Админка | KyrosvPay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            background: radial-gradient(ellipse at 50% 30%, #232b3b 60%, #181e29 100%);
+            min-height: 100vh;
+            color: #eaf1fb;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+        .navbar-kerosvpay {
+            background: #181e29;
+            border-bottom: 1px solid #232b3b;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+            min-height: 68px;
+            padding: 0 40px;
+        }
+        .navbar-kerosvpay .brand {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #6ec1ff;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 12px #0e223a;
+        }
+        .navbar-kerosvpay .nav-link, .navbar-kerosvpay .nav-link.disabled {
+            color: #eaf1fb !important;
+            font-size: 18px;
+            font-weight: 500;
+            margin-left: 24px;
+            margin-right: 0;
+            padding: 0;
+            background: none !important;
+            border: none;
+            border-radius: 0;
+            transition: color 0.18s;
+        }
+        .navbar-kerosvpay .nav-link:hover, .navbar-kerosvpay .nav-link.active {
+            color: #6ec1ff !important;
+            text-decoration: underline;
+        }
+        .navbar-kerosvpay .nav-link.disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .currency-select {
+            background: #232b3b;
+            color: #6ec1ff;
+            border: none;
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 16px;
+            margin-left: 24px;
+        }
+        .card, .table {
+            background: #20283a !important;
+            color: #eaf1fb;
+            border-radius: 18px !important;
+            box-shadow: 0 6px 32px 0 rgba(110,193,255,0.10), 0 1.5px 0 #2e3a54;
+        }
+        .table th, .table td {
+            background: #20283a !important;
+            color: #eaf1fb !important;
+            border-color: #2e3a54 !important;
+        }
+        .btn-main, .btn-primary, .btn-danger {
+            background: #6ec1ff;
+            color: #181e29;
+            font-weight: 700;
+            border-radius: 8px;
+            font-size: 16px;
+            border: none;
+            transition: background 0.18s, color 0.18s;
+        }
+        .btn-main:hover, .btn-primary:hover, .btn-danger:hover {
+            background: #fff;
+            color: #181e29;
+        }
+        .form-control, .form-select {
+            background: #232b3b;
+            color: #eaf1fb;
+            border: 1px solid #2e3a54;
+        }
+        .form-control:focus, .form-select:focus {
+            background: #232b3b;
+            color: #fff;
+            border-color: #6ec1ff;
+            box-shadow: 0 0 0 2px #6ec1ff33;
+        }
+        a { color: #6ec1ff; }
+        a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <nav class="navbar-kerosvpay d-flex align-items-center justify-content-between">
+        <div class="brand">KyrosvPay</div>
+        <div class="d-flex align-items-center">
+            <a href="/" class="nav-link">Главная</a>
+        </div>
+    </nav>
+    <div class="container py-4">
+        <h1 class="text-center mb-4">Панель администратора</h1>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Пользователи</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle">
+                                <thead>
+    <tr>
+        <th>Логин</th>
+        <th>Роль</th>
+        <th>Действие</th>
+    </tr>
+                                </thead>
+                                <tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.username }}</td>
+                                        <td>{% if user.is_admin %}<strong style="color:#6ec1ff;">админ</strong>{% else %}пользователь{% endif %}</td>
+        <td>
+            {% if not user.is_admin %}
+                                                <a href="{{ url_for('delete_user', user_id=user.id) }}" class="btn btn-danger btn-sm">Удалить</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Категории</h2>
+                        <form method="post" action="{{ url_for('add_category') }}" class="d-flex gap-2 mb-3">
+                            <input name="name" placeholder="Новая категория" required class="form-control">
+                            <button type="submit" class="btn btn-main">Добавить</button>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Название</th>
+                                        <th>Действие</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for category in categories %}
+                                    <tr>
+                                        <td>{{ category.name }}</td>
+                                        <td>
+                                            <a href="{{ url_for('delete_category', category_id=category.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Удалить категорию?')">Удалить</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+</table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Объявления (Модерация)</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead>
+    <tr>
+        <th>Название</th>
+        <th>Цена</th>
+                                <th>Валюта</th>
+        <th>Автор</th>
+                                <th>Категория</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+    </tr>
+                        </thead>
+                        <tbody>
+    {% for ad in ads %}
+    <tr>
+        <td>{{ ad.title }}</td>
+                                <td>{{ ad.price }}</td>
+                                <td>{% if ad.currency %}{{ ad.currency }}{% else %}₽{% endif %}</td>
+        <td>{{ ad.user_id }}</td>
+                                <td>{{ ad.category.name }}</td>
+                                <td>{% if ad.is_approved %}<span style="color:#6ec1ff;">Одобрено</span>{% else %}<span style="color:#ffc107;">На модерации</span>{% endif %}</td>
+                                <td>
+                                    {% if not ad.is_approved %}
+                                        <a href="{{ url_for('approve_ad', ad_id=ad.id) }}" class="btn btn-main btn-sm">Одобрить</a>
+                                    {% endif %}
+                                    <a href="{{ url_for('edit_ad', ad_id=ad.id) }}" class="btn btn-primary btn-sm">Редактировать</a>
+                                    <a href="{{ url_for('delete_ad', ad_id=ad.id) }}" class="btn btn-danger btn-sm">Удалить</a>
+                                </td>
+    </tr>
+    {% endfor %}
+                        </tbody>
+</table>
+                </div>
+            </div>
+        </div>
+        <a href="{{ url_for('admin_purchases') }}" class="btn btn-main w-100 mb-3">Логи покупок</a>
+    </div>
+</body>
+</html>

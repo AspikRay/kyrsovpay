@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать объявление | KyrosvPay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            background: radial-gradient(ellipse at 50% 30%, #232b3b 60%, #181e29 100%);
+            min-height: 100vh;
+            color: #eaf1fb;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+        .navbar-kerosvpay {
+            background: #181e29;
+            border-bottom: 1px solid #232b3b;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+            min-height: 68px;
+            padding: 0 40px;
+        }
+        .navbar-kerosvpay .brand {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #6ec1ff;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 12px #0e223a;
+        }
+        .navbar-kerosvpay .nav-link {
+            color: #eaf1fb !important;
+            font-size: 18px;
+            font-weight: 500;
+            margin-left: 24px;
+            margin-right: 0;
+            padding: 0;
+            background: none !important;
+            border: none;
+            border-radius: 0;
+            transition: color 0.18s;
+        }
+        .navbar-kerosvpay .nav-link:hover, .navbar-kerosvpay .nav-link.active {
+            color: #6ec1ff !important;
+            text-decoration: underline;
+        }
+        .form-wrapper {
+            max-width: 480px;
+            width: 100%;
+            margin: 48px auto 0 auto;
+            background: rgba(32, 40, 58, 0.98) !important;
+            border-radius: 22px !important;
+            box-shadow: 0 8px 40px 0 #0e223a55, 0 1.5px 0 #2e3a54 !important;
+            padding: 40px 32px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        @media (max-width: 600px) {
+            .form-wrapper { padding: 24px 8px; max-width: 98vw; }
+        }
+        .form-wrapper h2 {
+            color: #6ec1ff;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 32px;
+            letter-spacing: 1px;
+        }
+        .form-control, .form-select {
+            background: #232b3b !important;
+            color: #eaf1fb !important;
+            border: 1.5px solid #2e3a54 !important;
+            border-radius: 10px !important;
+            font-size: 17px !important;
+            margin-bottom: 18px !important;
+            min-height: 48px;
+        }
+        .form-control:focus, .form-select:focus {
+            background: #232b3b !important;
+            color: #fff !important;
+            border-color: #6ec1ff !important;
+            box-shadow: 0 0 0 2px #6ec1ff33 !important;
+        }
+        .btn-main {
+            background: linear-gradient(90deg, #6ec1ff 0%, #4a90e2 100%) !important;
+            color: #181e29 !important;
+            font-weight: 700 !important;
+            border-radius: 10px !important;
+            font-size: 20px !important;
+            padding: 14px 0 !important;
+            margin-top: 10px !important;
+            width: 100% !important;
+            box-shadow: 0 2px 12px #6ec1ff33 !important;
+            border: none !important;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s !important;
+        }
+        .btn-main:hover {
+            background: #6ec1ff !important;
+            color: #181e29 !important;
+            box-shadow: 0 4px 24px #6ec1ff55 !important;
+        }
+        .form-check-input {
+            background: #232b3b !important;
+            border: 1.5px solid #2e3a54 !important;
+            width: 1.5em;
+            height: 1.5em;
+        }
+        .form-check-input:checked {
+            background-color: #6ec1ff !important;
+            border-color: #6ec1ff !important;
+        }
+        .form-check-label {
+            color: #6ec1ff !important;
+            font-size: 17px !important;
+            margin-left: 8px !important;
+        }
+        a { color: #6ec1ff; }
+        a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <nav class="navbar-kerosvpay d-flex align-items-center justify-content-between">
+        <div class="brand">KyrosvPay</div>
+        <div class="d-flex align-items-center">
+            <a href="/admin" class="nav-link">Админка</a>
+            <a href="/" class="nav-link">Главная</a>
+        </div>
+    </nav>
+    <div class="container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="form-wrapper">
+            <h2>Редактировать объявление</h2>
+            <form method="post">
+                <select name="category_id" required class="form-select">
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if ad.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                <input name="title" class="form-control" placeholder="Название" value="{{ ad.title }}" required>
+                <textarea name="description" class="form-control" placeholder="Описание" rows="4" required>{{ ad.description }}</textarea>
+                <div class="d-flex gap-2">
+                    <input name="price" class="form-control" placeholder="Цена" type="number" step="0.01" value="{{ ad.price }}" required>
+                    <select name="currency" class="form-select" style="max-width:120px;">
+                        <option value="RUB" {% if ad.currency == 'RUB' %}selected{% endif %}>₽</option>
+                        <option value="USD" {% if ad.currency == 'USD' %}selected{% endif %}>$</option>
+                        <option value="EUR" {% if ad.currency == 'EUR' %}selected{% endif %}>€</option>
+                    </select>
+                </div>
+                <div class="form-check mb-3 d-flex align-items-center">
+                    <input class="form-check-input" type="checkbox" name="is_approved" id="is_approved" {% if ad.is_approved %}checked{% endif %}>
+                    <label class="form-check-label" for="is_approved">Одобрено</label>
+                </div>
+                <button type="submit" class="btn-main">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 

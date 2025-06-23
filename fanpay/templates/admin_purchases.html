@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">Логи покупок</h2>
+    <div class="table-responsive">
+        <table class="table table-dark table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Пользователь</th>
+                    <th>Товар</th>
+                    <th>Цена</th>
+                    <th>Валюта</th>
+                    <th>Время</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.id }}</td>
+                    <td>{{ log.username or 'Гость' }}</td>
+                    <td>{{ log.ad_title }}</td>
+                    <td>{{ log.price }}</td>
+                    <td>{{ log.currency }}</td>
+                    <td>{{ log.timestamp.strftime('%d.%m.%Y %H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{{ url_for('admin_panel') }}" class="btn btn-main mt-3">Назад в админку</a>
+</div>
+{% endblock %} 
