@@ -20,6 +20,7 @@ FanPay — это учебный веб-проект, имитирующий м�
 ```bash
 git clone https://github.com/AspikRay/kyrsovpay
 cd kyrsovpay
+cd fanpay
 pip install -r requirements.txt
 python app.py
 
